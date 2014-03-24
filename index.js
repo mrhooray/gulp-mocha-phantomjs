@@ -7,7 +7,7 @@ var gutil = require('gulp-util');
 var async = require('async');
 var pluginName = require('./package.json').name;
 
-function gulpMochaPhantomJS() {
+function mochaPhantomJS() {
   var script = path.join(__dirname, 'node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {
@@ -46,4 +46,4 @@ function spawnPhantomJS(args, cb) {
   });
 }
 
-module.exports = gulpMochaPhantomJS;
+module.exports = mochaPhantomJS;
