@@ -1,6 +1,6 @@
 {
   "name": "gulp-mocha-phantomjs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "gulp plugin for running client-side mocha tests with phantomjs",
   "keywords": [
     "gulpplugin",
