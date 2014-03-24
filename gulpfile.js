@@ -6,7 +6,7 @@ var mocha = require('gulp-mocha');
 
 var paths = {
   scripts: ['**/*.js', '!node_modules/**'],
-  tests: 'test.js'
+  tests: 'test/**.*js'
 };
 
 gulp.task('jshint', function () {
