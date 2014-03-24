@@ -30,7 +30,7 @@ function gulpMochaPhantomJS() {
 }
 
 function spawnPhantomJS(args, cb) {
-  var phantomjs = spawn(path.join(__dirname, '../phantomjs/bin/phantomjs'), args);
+  var phantomjs = spawn(path.join(__dirname, 'node_modules/phantomjs/bin/phantomjs'), args);
   phantomjs.stdout.pipe(process.stdout);
   phantomjs.stderr.pipe(process.stderr);
   phantomjs.on('error', function (err) {
