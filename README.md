@@ -13,7 +13,7 @@ var gulp = require('gulp');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
 
 gulp.task('default', function () {
-  gulp
+  return gulp
   .src('test/runner.html')
   .pipe(mochaPhantomJS());
 });
