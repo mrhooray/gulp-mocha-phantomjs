@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path');
+var fs = require('fs');
 var spawn = require('child_process').spawn;
 var through = require('through2');
 var gutil = require('gulp-util');
@@ -8,15 +8,19 @@ var async = require('async');
 var pluginName = require('./package.json').name;
 
 function mochaPhantomJS() {
-  var script = path.join(__dirname, 'node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee');
+  var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {
     paths.push(file.path);
     this.push(file);
     cb();
   }, function (cb) {
+    if (!scriptPath) {
+      this.emit('error', new gutil.PluginError(pluginName, 'mocha-phantomjs.coffee not found'));
+      return cb();
+    }
     async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([script, path], cb);
+      spawnPhantomJS([scriptPath, path], cb);
     }, function (err) {
       if (err) {
         this.emit('error', err);
@@ -30,20 +34,37 @@ function mochaPhantomJS() {
 }
 
 function spawnPhantomJS(args, cb) {
-  var phantomjs = spawn(path.join(__dirname, 'node_modules/phantomjs/bin/phantomjs'), args);
-  phantomjs.stdout.pipe(process.stdout);
-  phantomjs.stderr.pipe(process.stderr);
-  phantomjs.on('error', function (err) {
-    cb(new gutil.PluginError(pluginName, err.message));
-  });
-  phantomjs.on('exit', function (code) {
-    switch (code) {
-      case 0:
-        return cb();
-      default:
-        return cb(new gutil.PluginError(pluginName, 'test failed'));
+  var path = lookup('phantomjs/bin/phantomjs', true);
+  if (!path) {
+    cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
+  } else {
+    var phantomjs = spawn(path, args);
+    phantomjs.stdout.pipe(process.stdout);
+    phantomjs.stderr.pipe(process.stderr);
+    phantomjs.on('error', function (err) {
+      cb(new gutil.PluginError(pluginName, err.message));
+    });
+    phantomjs.on('exit', function (code) {
+      switch (code) {
+        case 0:
+          return cb();
+        default:
+          cb(new gutil.PluginError(pluginName, 'test failed'));
+      }
+    });
+  }
+}
+
+function lookup(path, isExecutable) {
+  for (var i = 0 ; i < module.paths.length; i++) {
+    var absPath = require('path').join(module.paths[i], path);
+    if (isExecutable && process.platform === 'win32') {
+      absPath += '.cmd';
     }
-  });
+    if (fs.existsSync(absPath)) {
+      return absPath;
+    }
+  }
 }
 
 module.exports = mochaPhantomJS;
