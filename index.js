@@ -34,7 +34,7 @@ function mochaPhantomJS() {
 }
 
 function spawnPhantomJS(args, cb) {
-  var path = lookup('phantomjs/bin/phantomjs', true);
+  var path = lookup('.bin/phantomjs', true);
   if (!path) {
     cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
   } else {
