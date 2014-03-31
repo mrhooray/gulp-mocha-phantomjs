@@ -8,6 +8,32 @@ $ npm install gulp-mocha-phantomjs --save-dev
 ```
 
 ## Usage
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocha Test Runner</title>
+    <link rel="stylesheet" href="bower_components/mocha/mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="bower_components/mocha/mocha.js"></script>
+    <script src="bower_components/should/should.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script src="spec/test.js"></script>
+    <script>
+      if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+      } else {
+        mocha.run();
+      }
+    </script>
+  </body>
+</html>
+```
 ```javascript
 var gulp = require('gulp');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
