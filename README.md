@@ -34,6 +34,7 @@ $ npm install gulp-mocha-phantomjs --save-dev
   </body>
 </html>
 ```
+
 ```javascript
 var gulp = require('gulp');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
@@ -45,17 +46,15 @@ gulp.task('test', function () {
 });
 ```
 
-The reporter can be chosen by
-supplying an object with a property
-`reporter`, for example: `{reporter: 'flight'}`:
+The reporter can be chosen by supplying an object with a property `reporter`:
 
 ```javascript
 gulp.task('testflight', function () {
   return gulp
   .src('test/runner.html')
   .pipe(mochaPhantomJS({reporter: 'flight'}));
+});
 ```
-
 
 ## License
 MIT
