@@ -38,4 +38,23 @@ describe('gulp-mocha-phantomjs', function () {
     stream.write(file);
     stream.end();
   });
+
+  it('should use the tap reporter when chosen', function (cb) {
+    var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html')});
+    var stream = mochaPhantomJS({reporter: 'tap'});
+    var passed = false;
+
+    stream.on('after_flush', function () {
+      assert.equal(passed, true);
+      process.stdout.write = out;
+      cb();
+    });
+    process.stdout.write = function (str) {
+      if (/ok 1 /.test(str)) {
+        passed = true;
+      }
+    };
+    stream.write(file);
+    stream.end();
+  });
 });
