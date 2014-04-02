@@ -7,7 +7,9 @@ var gutil = require('gulp-util');
 var async = require('async');
 var pluginName = require('./package.json').name;
 
-function mochaPhantomJS() {
+function mochaPhantomJS(options) {
+  options = options || {};
+  var reporter = options.reporter || 'spec';
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {
@@ -20,7 +22,7 @@ function mochaPhantomJS() {
       return cb();
     }
     async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([scriptPath, path], cb);
+      spawnPhantomJS([scriptPath, path, reporter], cb);
     }, function (err) {
       if (err) {
         this.emit('error', err);
