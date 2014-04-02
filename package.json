@@ -5,7 +5,15 @@
   "keywords": [
     "gulpplugin",
     "mocha",
-    "phantomjs"
+    "phantomjs",
+    "test",
+    "testing",
+    "framework",
+    "runner",
+    "unit",
+    "spec",
+    "tdd",
+    "bdd"
   ],
   "author": "Rui Hu <code@mrhooray.com>",
   "main": "index.js",
