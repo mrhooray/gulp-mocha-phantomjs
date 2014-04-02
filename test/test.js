@@ -29,6 +29,7 @@ describe('gulp-mocha-phantomjs', function () {
   it('should fail build when test failed', function (cb) {
     var file = new gutil.File({path: path.join(__dirname, 'fixture-fail.html')});
     var stream = mochaPhantomJS();
+
     stream.on('error', function (err) {
       assert.equal(err.plugin, require('../package.json').name);
       process.stdout.write = out;
