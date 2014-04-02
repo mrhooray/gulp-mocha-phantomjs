@@ -8,8 +8,8 @@ var async = require('async');
 var pluginName = require('./package.json').name;
 
 function mochaPhantomJS(options) {
-	options = options || {};
-	var reporter = options.reporter || 'spec';
+  options = options || {};
+  var reporter = options.reporter || 'spec';
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {

@@ -50,7 +50,7 @@ describe('gulp-mocha-phantomjs', function () {
       cb();
     });
     process.stdout.write = function (str) {
-      if (/ok 1 /.test(str)) {
+      if (/# pass 1/.test(str)) {
         passed = true;
       }
     };
