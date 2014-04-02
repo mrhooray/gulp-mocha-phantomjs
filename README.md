@@ -45,5 +45,17 @@ gulp.task('test', function () {
 });
 ```
 
+The reporter can be chosen by
+supplying an object with a property
+`reporter`, for example: `{reporter: 'flight'}`:
+
+```javascript
+gulp.task('testflight', function () {
+  return gulp
+  .src('test/runner.html')
+  .pipe(mochaPhantomJS({reporter: 'flight'}));
+```
+
+
 ## License
 MIT
