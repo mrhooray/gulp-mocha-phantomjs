@@ -1,1 +1,7 @@
-test
+.gitignore
+.jshintrc
+.npmignore
+.travis.yml
+gulpfile.js
+Makefile
+test/

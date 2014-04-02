@@ -46,13 +46,13 @@ gulp.task('test', function () {
 });
 ```
 
-The reporter can be chosen by supplying an object with a property `reporter`:
+The reporter can be chosen by supplying an object with `reporter` property:
 
 ```javascript
-gulp.task('testflight', function () {
+gulp.task('test', function () {
   return gulp
   .src('test/runner.html')
-  .pipe(mochaPhantomJS({reporter: 'flight'}));
+  .pipe(mochaPhantomJS({reporter: 'nyan'}));
 });
 ```
 
