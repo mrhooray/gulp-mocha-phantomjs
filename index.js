@@ -22,7 +22,7 @@ function mochaPhantomJS(options) {
       return cb();
     }
     async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([scriptPath, path.split(path.sep).join('/'), reporter], cb);
+      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], cb);
     }, function (err) {
       if (err) {
         this.emit('error', err);
