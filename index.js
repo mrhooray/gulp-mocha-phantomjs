@@ -36,11 +36,11 @@ function mochaPhantomJS(options) {
 }
 
 function spawnPhantomJS(args, cb) {
-  var path = lookup('.bin/phantomjs', true);
-  if (!path) {
+  var phantomjsPath = lookup('.bin/phantomjs', true);
+  if (!phantomjsPath) {
     cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
   } else {
-    var phantomjs = spawn(path, args);
+    var phantomjs = spawn(phantomjsPath, args);
     phantomjs.stdout.pipe(process.stdout);
     phantomjs.stderr.pipe(process.stderr);
     phantomjs.on('error', function (err) {
