@@ -37,6 +37,10 @@ function mochaPhantomJS(options) {
 
 function spawnPhantomJS(args, cb) {
   var phantomjsPath = lookup('.bin/phantomjs', true);
+  // case where npm is started with --no-bin-links
+  if (!phantomjsPath) {
+    phantomjsPath = lookup('phantomjs/bin/phantomjs', true);
+  }
   if (!phantomjsPath) {
     cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
   } else {
