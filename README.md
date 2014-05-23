@@ -56,7 +56,7 @@ gulp.task('test', function () {
 });
 ```
 
-You can set the `captureFile` option to write the results of mocha tests in a file :
+You can set the `captureFile` option to write the results of mocha tests in a file:
 
 ```javascript
 gulp.task('test', function () {
