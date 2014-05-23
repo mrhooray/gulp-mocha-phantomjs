@@ -11,7 +11,7 @@ function mochaPhantomJS(options) {
   options = options || {};
   var reporter = options.reporter || 'spec';
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
-  var captureFile = options.captureFile;
+  var dump = options.dump;
   var paths = [];
   return through.obj(function (file, enc, cb) {
     paths.push(file.path);
@@ -23,7 +23,7 @@ function mochaPhantomJS(options) {
       return cb();
     }
     async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], captureFile, cb);
+      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], dump, cb);
     }, function (err) {
       if (err) {
         this.emit('error', err);
@@ -36,7 +36,7 @@ function mochaPhantomJS(options) {
   });
 }
 
-function spawnPhantomJS(args, captureFile, cb) {
+function spawnPhantomJS(args, dump, cb) {
   var phantomjsPath = lookup('.bin/phantomjs', true);
   // case where npm is started with --no-bin-links
   if (!phantomjsPath) {
@@ -48,21 +48,15 @@ function spawnPhantomJS(args, captureFile, cb) {
     var phantomjs = spawn(phantomjsPath, args);
     var fileOutput = null;
     phantomjs.stdout.pipe(process.stdout);
-    if (captureFile) {
-        fileOutput = fs.createWriteStream(captureFile);
+    if (dump) {
+        fileOutput = fs.createWriteStream(dump);
 	phantomjs.stdout.pipe(fileOutput);
     }
     phantomjs.stderr.pipe(process.stderr);
     phantomjs.on('error', function (err) {
-      if (fileOutput) {
-        fileOutput.end();
-      }
       cb(new gutil.PluginError(pluginName, err.message));
     });
     phantomjs.on('exit', function (code) {
-      if (fileOutput) {
-        fileOutput.end();
-      }
       switch (code) {
         case 0:
           return cb();
