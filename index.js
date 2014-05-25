@@ -10,8 +10,8 @@ var pluginName = require('./package.json').name;
 function mochaPhantomJS(options) {
   options = options || {};
   var reporter = options.reporter || 'spec';
-  var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var dump = options.dump;
+  var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {
     paths.push(file.path);
@@ -38,7 +38,7 @@ function mochaPhantomJS(options) {
 
 function spawnPhantomJS(args, dump, cb) {
   var phantomjsPath = lookup('.bin/phantomjs', true);
-  // case where npm is started with --no-bin-links
+  // in case npm is started with --no-bin-links
   if (!phantomjsPath) {
     phantomjsPath = lookup('phantomjs/bin/phantomjs', true);
   }
@@ -46,13 +46,11 @@ function spawnPhantomJS(args, dump, cb) {
     cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
   } else {
     var phantomjs = spawn(phantomjsPath, args);
-    var fileOutput = null;
     phantomjs.stdout.pipe(process.stdout);
-    if (dump) {
-        fileOutput = fs.createWriteStream(dump);
-	phantomjs.stdout.pipe(fileOutput);
-    }
     phantomjs.stderr.pipe(process.stderr);
+    if (dump) {
+      phantomjs.stdout.pipe(fs.createWriteStream(dump));
+    }
     phantomjs.on('error', function (err) {
       cb(new gutil.PluginError(pluginName, err.message));
     });
