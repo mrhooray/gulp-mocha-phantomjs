@@ -11,6 +11,7 @@ function mochaPhantomJS(options) {
   options = options || {};
   var reporter = options.reporter || 'spec';
   var dump = options.dump;
+  var silentMode = Boolean(options.silentMode);
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {
@@ -23,7 +24,7 @@ function mochaPhantomJS(options) {
       return cb();
     }
     async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], dump, cb);
+      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], dump, cb, silentMode);
     }, function (err) {
       if (err) {
         this.emit('error', err);
@@ -36,7 +37,7 @@ function mochaPhantomJS(options) {
   });
 }
 
-function spawnPhantomJS(args, dump, cb) {
+function spawnPhantomJS(args, dump, cb, silentMode) {
   var phantomjsPath = lookup('.bin/phantomjs', true);
   // in case npm is started with --no-bin-links
   if (!phantomjsPath) {
@@ -59,7 +60,12 @@ function spawnPhantomJS(args, dump, cb) {
         case 0:
           return cb();
         default:
-          cb(new gutil.PluginError(pluginName, 'test failed'));
+          if (code === 1 && silentMode) {
+            phantomjs.stdout.pipe(fs.createWriteStream('test failed'));
+            return cb();
+          } else {
+            cb(new gutil.PluginError(pluginName, 'test failed'));
+          }
       }
     });
   }
