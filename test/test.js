@@ -42,7 +42,7 @@ describe('gulp-mocha-phantomjs', function () {
 
   it('should fail silently when test failed', function (cb) {
     var file = new gutil.File({path: path.join(__dirname, 'fixture-fail.html')});
-    var stream = mochaPhantomJS({silentMode: true});
+    var stream = mochaPhantomJS({silent: true});
     var passed = true;
 
     stream.on('after_flush', function () {
@@ -57,7 +57,6 @@ describe('gulp-mocha-phantomjs', function () {
     };
     stream.write(file);
     stream.end();
-
   });
 
   it('should use the tap reporter when chosen', function (cb) {
