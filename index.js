@@ -10,8 +10,8 @@ var pluginName = require('./package.json').name;
 function mochaPhantomJS(options) {
   options = options || {};
   var reporter = options.reporter || 'spec';
-  var dump = options.dump;
   var silent = options.silent || false;
+  var dump = options.dump;
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
   return through.obj(function (file, enc, cb) {
@@ -60,9 +60,9 @@ function spawnPhantomJS(args, dump, silent, cb) {
         case 0:
           return cb();
         default:
-          if (code === 1 && silent) {
-            gutil.log('test failed');
-            return cb();
+          if (silent) {
+            gutil.log('silent mode: test failed');
+            cb();
           } else {
             cb(new gutil.PluginError(pluginName, 'test failed'));
           }
