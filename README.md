@@ -66,5 +66,16 @@ gulp.task('test', function () {
 });
 ```
 
+To test against remote by url:
+
+```javascript
+gulp.task('test', function () {
+  var stream = mochaPhantomJS();
+  stream.write({path: 'http://localhost:8000/index.html'});
+  stream.end();
+  return stream;
+});
+```
+
 ## License
 MIT
