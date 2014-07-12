@@ -21,7 +21,6 @@
     "test": "make test"
   },
   "dependencies": {
-    "async": "^0.2.10",
     "gulp-util": "^2.2.14",
     "mocha-phantomjs": "^3.3.2",
     "phantomjs": "^1.9.0",

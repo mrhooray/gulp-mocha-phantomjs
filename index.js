@@ -4,7 +4,6 @@ var fs = require('fs');
 var spawn = require('child_process').spawn;
 var through = require('through2');
 var gutil = require('gulp-util');
-var async = require('async');
 var pluginName = require('./package.json').name;
 
 function mochaPhantomJS(options) {
@@ -13,27 +12,23 @@ function mochaPhantomJS(options) {
   var silent = options.silent || false;
   var dump = options.dump;
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
-  var paths = [];
   return through.obj(function (file, enc, cb) {
-    paths.push(file.path);
-    this.push(file);
-    cb();
-  }, function (cb) {
     if (!scriptPath) {
       this.emit('error', new gutil.PluginError(pluginName, 'mocha-phantomjs.coffee not found'));
       return cb();
     }
-    async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], dump, silent, cb);
-    }, function (err) {
+    spawnPhantomJS([scriptPath, file.path.split(require('path').sep).join('/'), reporter], dump, silent, function (err) {
       if (err) {
         this.emit('error', err);
       }
+      this.push(file);
       cb();
-      // for testing purpose
-      // be able to add a callback after _flush
-      this.emit('after_flush');
     }.bind(this));
+  }, function (cb) {
+    cb();
+    // for testing purpose
+    // be able to add a callback after _flush
+    this.emit('after_flush');
   });
 }
 
