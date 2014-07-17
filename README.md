@@ -65,6 +65,20 @@ gulp.task('test', function () {
   .pipe(mochaPhantomJS({reporter: 'xunit', dump:'test.xml'}));
 });
 ```
+You can set the `grep` option to run selected test:
+
+```javascript
+gulp.task('test', function () {
+  return gulp
+  .src('test/runner.html')
+  .pipe(mochaPhantomJS({grep: 'PATTERN_OF_MOCHA_TEST'}));
+});
+```
+It results the same as running the following command in command line
+
+```
+mocha-phantomjs "test/runner.html?grep=PATTERN_OF_MOCHA_TEST"
+```
 
 To test against remote by url:
 
