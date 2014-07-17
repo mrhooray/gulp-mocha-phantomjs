@@ -11,6 +11,7 @@ function mochaPhantomJS(options) {
   options = options || {};
   var reporter = options.reporter || 'spec';
   var silent = options.silent || false;
+  var grep = options.grep;
   var dump = options.dump;
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
   var paths = [];
@@ -24,7 +25,7 @@ function mochaPhantomJS(options) {
       return cb();
     }
     async.eachSeries(paths, function (path, cb) {
-      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], dump, silent, cb);
+      spawnPhantomJS([scriptPath, path.split(require('path').sep).join('/'), reporter], dump, silent, grep, cb);
     }, function (err) {
       if (err) {
         this.emit('error', err);
@@ -37,9 +38,12 @@ function mochaPhantomJS(options) {
   });
 }
 
-function spawnPhantomJS(args, dump, silent, cb) {
+function spawnPhantomJS(args, dump, silent, grep, cb ) {
   var phantomjsPath = lookup('.bin/phantomjs', true);
   // in case npm is started with --no-bin-links
+  if (grep) {
+    args[1] += '?grep=' + grep;
+  }
   if (!phantomjsPath) {
     phantomjsPath = lookup('phantomjs/bin/phantomjs', true);
   }
