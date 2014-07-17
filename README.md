@@ -74,7 +74,7 @@ gulp.task('test', function () {
   .pipe(mochaPhantomJS({grep: 'PATTERN_OF_MOCHA_TEST'}));
 });
 ```
-It results the same as running in 
+It results the same as running the following command in command line
 
 ```
 mocha-phantomjs "test/runner.html?grep=PATTERN_OF_MOCHA_TEST"
