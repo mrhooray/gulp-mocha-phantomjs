@@ -33,6 +33,7 @@ function mochaPhantomJS(options) {
       // for testing purpose
       // be able to add a callback after _flush
       this.emit('after_flush');
+      this.emit('end');
     }.bind(this));
   });
 }
