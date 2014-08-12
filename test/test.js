@@ -51,23 +51,17 @@ describe('gulp-mocha-phantomjs', function () {
   it('should fail silently in silent mode', function (cb) {
     var file = new gutil.File({path: path.join(__dirname, 'fixture-fail.html')});
     var stream = mochaPhantomJS({silent: true});
-    var passed = true;
 
     stream.on('error', function () {
       assert.fail(undefined, undefined, 'should not emit error');
     });
 
     stream.on('after_flush', function () {
-      assert.equal(passed, false);
       process.stdout.write = out;
       cb();
     });
 
-    process.stdout.write = function (str) {
-      if (/silent mode: test failed/.test(str)) {
-        passed = false;
-      }
-    };
+    process.stdout.write = function () {};
 
     stream.write(file);
     stream.end();

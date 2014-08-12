@@ -61,7 +61,6 @@ function spawnPhantomJS(args, dump, silent, cb) {
           return cb();
         default:
           if (silent) {
-            gutil.log('silent mode: test failed');
             cb();
           } else {
             cb(new gutil.PluginError(pluginName, 'test failed'));
