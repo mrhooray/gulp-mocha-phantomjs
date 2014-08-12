@@ -16,7 +16,7 @@ describe('gulp-mocha-phantomjs', function () {
       assert.fail(undefined, undefined, 'should not emit error');
     });
 
-    stream.on('after_flush', function () {
+    stream.on('finish', function () {
       assert.equal(passed, true);
       process.stdout.write = out;
       cb();
@@ -56,7 +56,7 @@ describe('gulp-mocha-phantomjs', function () {
       assert.fail(undefined, undefined, 'should not emit error');
     });
 
-    stream.on('after_flush', function () {
+    stream.on('finish', function () {
       process.stdout.write = out;
       cb();
     });
@@ -76,7 +76,7 @@ describe('gulp-mocha-phantomjs', function () {
       assert.fail(undefined, undefined, 'should not emit error');
     });
 
-    stream.on('after_flush', function () {
+    stream.on('finish', function () {
       assert.equal(passed, true);
       process.stdout.write = out;
       cb();

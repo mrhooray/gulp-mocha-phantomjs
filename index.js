@@ -24,11 +24,6 @@ function mochaPhantomJS(options) {
       this.push(file);
       cb();
     }.bind(this));
-  }, function (cb) {
-    cb();
-    // for testing purpose
-    // be able to add a callback after _flush
-    this.emit('after_flush');
   });
 }
 
