@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var url = require('url');
 var spawn = require('child_process').spawn;
 var through = require('through2');
 var gutil = require('gulp-util');
@@ -8,56 +9,63 @@ var pluginName = require('./package.json').name;
 
 function mochaPhantomJS(options) {
   options = options || {};
-  var reporter = options.reporter || 'spec';
-  var silent = options.silent || false;
-  var dump = options.dump;
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
+
+  if (!scriptPath) {
+    throw new gutil.PluginError(pluginName, 'mocha-phantomjs.coffee not found');
+  }
+
   return through.obj(function (file, enc, cb) {
-    if (!scriptPath) {
-      this.emit('error', new gutil.PluginError(pluginName, 'mocha-phantomjs.coffee not found'));
-      return cb();
-    }
-    spawnPhantomJS([scriptPath, file.path.split(require('path').sep).join('/'), reporter], dump, silent, function (err) {
+    var args = [
+      scriptPath,
+      url.format({
+        pathname: file.path.split(require('path').sep).join('/'),
+        query: options.mocha || {}
+      }),
+      options.reporter || 'spec',
+      JSON.stringify(options.phantomjs || {})
+    ];
+
+    spawnPhantomJS(args, options, function (err) {
       if (err) {
         this.emit('error', err);
       }
+
       this.push(file);
+
       cb();
     }.bind(this));
   });
 }
 
-function spawnPhantomJS(args, dump, silent, cb) {
-  var phantomjsPath = lookup('.bin/phantomjs', true);
+function spawnPhantomJS(args, options, cb) {
   // in case npm is started with --no-bin-links
+  var phantomjsPath = lookup('.bin/phantomjs', true) || lookup('phantomjs/bin/phantomjs', true);
+
   if (!phantomjsPath) {
-    phantomjsPath = lookup('phantomjs/bin/phantomjs', true);
+    return cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
   }
-  if (!phantomjsPath) {
-    cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
-  } else {
-    var phantomjs = spawn(phantomjsPath, args);
-    phantomjs.stdout.pipe(process.stdout);
-    phantomjs.stderr.pipe(process.stderr);
-    if (dump) {
-      phantomjs.stdout.pipe(fs.createWriteStream(dump));
+
+  var phantomjs = spawn(phantomjsPath, args);
+
+  if (options.dump) {
+    phantomjs.stdout.pipe(fs.createWriteStream(options.dump));
+  }
+
+  phantomjs.stdout.pipe(process.stdout);
+  phantomjs.stderr.pipe(process.stderr);
+
+  phantomjs.on('error', function (err) {
+    cb(new gutil.PluginError(pluginName, err.message));
+  });
+
+  phantomjs.on('exit', function (code) {
+    if (code === 0 || options.silent) {
+      cb();
+    } else {
+      cb(new gutil.PluginError(pluginName, 'test failed'));
     }
-    phantomjs.on('error', function (err) {
-      cb(new gutil.PluginError(pluginName, err.message));
-    });
-    phantomjs.on('exit', function (code) {
-      switch (code) {
-        case 0:
-          return cb();
-        default:
-          if (silent) {
-            cb();
-          } else {
-            cb(new gutil.PluginError(pluginName, 'test failed'));
-          }
-      }
-    });
-  }
+  });
 }
 
 function lookup(path, isExecutable) {

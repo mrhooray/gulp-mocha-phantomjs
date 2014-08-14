@@ -23,7 +23,7 @@ describe('gulp-mocha-phantomjs', function () {
     });
 
     process.stdout.write = function (str) {
-      if (/1 passing/.test(str)) {
+      if (/3 passing/.test(str)) {
         passed = true;
       }
     };
@@ -83,7 +83,67 @@ describe('gulp-mocha-phantomjs', function () {
     });
 
     process.stdout.write = function (str) {
-      if (/# pass 1/.test(str)) {
+      if (/# pass 3/.test(str)) {
+        passed = true;
+      }
+    };
+
+    stream.write(file);
+    stream.end();
+  });
+
+  it('should pass through mocha options', function (cb) {
+    var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html')});
+    var stream = mochaPhantomJS({mocha: {grep: 'viewport'}});
+    var passed = false;
+
+    stream.on('error', function () {
+      assert.fail(undefined, undefined, 'should not emit error');
+    });
+
+    stream.on('finish', function () {
+      assert.equal(passed, true);
+      process.stdout.write = out;
+      cb();
+    });
+
+    process.stdout.write = function (str) {
+      if (/1 passing/.test(str)) {
+        passed = true;
+      }
+      if (/should be false/.test(str) || /should be true/.test(str)) {
+        assert.fail();
+      }
+    };
+
+    stream.write(file);
+    stream.end();
+  });
+
+  it('should pass through phantomjs options', function (cb) {
+    var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html')});
+    var stream = mochaPhantomJS({
+      phantomjs: {
+        viewportSize: {
+          width: 1,
+          height: 1
+        }
+      }
+    });
+    var passed = false;
+
+    stream.on('error', function () {
+      assert.fail(undefined, undefined, 'should not emit error');
+    });
+
+    stream.on('finish', function () {
+      assert.equal(passed, true);
+      process.stdout.write = out;
+      cb();
+    });
+
+    process.stdout.write = function (str) {
+      if (/3 passing/.test(str)) {
         passed = true;
       }
     };
