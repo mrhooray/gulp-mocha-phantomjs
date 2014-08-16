@@ -46,7 +46,7 @@ gulp.task('test', function () {
 });
 ```
 
-The reporter can be chosen by supplying an object with `reporter` property:
+Reporter can be chosen via `reporter` option:
 
 ```javascript
 gulp.task('test', function () {
@@ -56,7 +56,7 @@ gulp.task('test', function () {
 });
 ```
 
-You can set the `dump` option to write the results of mocha tests in a file:
+Output of mocha tests can be piped into a file via `dump` option:
 
 ```javascript
 gulp.task('test', function () {
@@ -66,7 +66,7 @@ gulp.task('test', function () {
 });
 ```
 
-To test against remote by url:
+Test against remote by url:
 
 ```javascript
 gulp.task('test', function () {
@@ -74,6 +74,33 @@ gulp.task('test', function () {
   stream.write({path: 'http://localhost:8000/index.html'});
   stream.end();
   return stream;
+});
+```
+
+Pass options to mocha:
+
+```javascript
+gulp.task('test', function () {
+  return gulp
+  .src('test/runner.html')
+  .pipe(mochaPhantomJS({mocha: {grep: 'pattern'}}));
+});
+```
+
+Pass options to PhantomJS:
+
+```javascript
+gulp.task('test', function () {
+  return gulp
+  .src('test/runner.html')
+  .pipe(mochaPhantomJS({
+    phantomjs: {
+      viewportSize: {
+        width: 1,
+        height: 1
+      }
+    }
+  }));
 });
 ```
 
