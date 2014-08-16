@@ -77,27 +77,21 @@ gulp.task('test', function () {
 });
 ```
 
-Pass options to mocha:
-
-```javascript
-gulp.task('test', function () {
-  return gulp
-  .src('test/runner.html')
-  .pipe(mochaPhantomJS({mocha: {grep: 'pattern'}}));
-});
-```
-
-Pass options to PhantomJS:
+Pass options to mocha and/or PhantomJS:
 
 ```javascript
 gulp.task('test', function () {
   return gulp
   .src('test/runner.html')
   .pipe(mochaPhantomJS({
+    reporter: 'tap',
+    mocha: {
+      grep: 'pattern'
+    },
     phantomjs: {
       viewportSize: {
-        width: 1,
-        height: 1
+        width: 1024,
+        height: 768
       }
     }
   }));
