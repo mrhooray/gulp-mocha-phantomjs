@@ -22,11 +22,18 @@
           false.should.equal(false);
         });
       });
-      describe('viewportSize', function () {
-        it('should be phantomjs default or testing value', function () {
-          (window.innerWidth === 400 || window.innerWidth === 1).should.equal(true);
-          (window.innerHeight === 300 || window.innerHeight === 1).should.equal(true);
-        });
+      describe('viewport size', function () {
+        if (window._phantom) {
+          it('should be phantomjs default or testing value', function () {
+            (window.innerWidth === 400 || window.innerWidth === 1).should.equal(true);
+            (window.innerHeight === 300 || window.innerHeight === 1).should.equal(true);
+          });
+        } else {
+          it('should be valid', function () {
+            (window.innerWidth >= 0).should.equal(true);
+            (window.innerHeight >= 0).should.equal(true);
+          });
+        }
       });
     </script>
     <script>
