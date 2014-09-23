@@ -6,7 +6,7 @@ var mocha = require('gulp-mocha');
 var mochaPhantomJS = require('./');
 
 var paths = {
-  scripts: ['**/*.js', '!node_modules/**'],
+  scripts: ['**/*.js', '!node_modules/**', '!test/fixtures/**'],
   tests: 'test/**.*js'
 };
 
