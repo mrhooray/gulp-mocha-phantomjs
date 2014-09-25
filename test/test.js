@@ -7,6 +7,8 @@ var mochaPhantomJS = require('../index');
 var out = process.stdout.write.bind(process.stdout);
 var httpsServer = require('./https-server');
 var cli = require('../cli');
+var through = require('through2');
+
 
 describe('gulp-mocha-phantomjs', function () {
   it('should pass when test passed', function (cb) {
@@ -204,6 +206,36 @@ describe('gulp-mocha-phantomjs', function () {
 
     phantom.write({path: 'https://localhost:4141/test/fixture-pass.html'});
     phantom.end();
+  });
+
+  it('should transform the file contents if transform applied', function (done) {
+    var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html')});
+    var stream = mochaPhantomJS({
+      transform: {
+        enabled: true,
+        outputFilter: function (outputBuffer) {
+          var output = outputBuffer.toString('utf8');
+          return !/Error loading resource/.test(output) &&
+            !/Running headless automated spec through phantomjs/.test(output);
+        }
+      },
+      reporter: 'xunit'
+    });
+
+    stream.on('error', function () {
+      assert.fail(undefined, undefined, 'should not emit error');
+    });
+
+    stream.pipe(through.obj(function(receivedFile, enc, cb) {
+      assert.equal(receivedFile.path, file.path);
+      var contents = receivedFile.contents.toString('utf8');
+      assert.equal(true, /testsuite name="Mocha Tests" tests="3"/.test(contents));
+      cb();
+      done();
+    }));
+
+    stream.write(file);
+    stream.end();
   });
 
 });

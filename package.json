@@ -21,10 +21,11 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "gulp-util": "^2.2.14",
+    "gulp-util": "^2.2.20",
+    "highland": "^1.29.0",
     "mocha-phantomjs": "^3.3.2",
-    "phantomjs": "^1.9.0",
-    "through2": "^0.4.1"
+    "phantomjs": "^1.9.10",
+    "through2": "^0.4.2"
   },
   "devDependencies": {
     "gulp": "^3.5.6",

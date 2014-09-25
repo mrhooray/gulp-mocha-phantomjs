@@ -47,6 +47,7 @@ var JSON_TO_CLI = {
 };
 
 function createPhantomCliParams(phantomjs) {
+  phantomjs = phantomjs || {};
   return Object
            .keys(phantomjs)
            .filter(function(setting) {
