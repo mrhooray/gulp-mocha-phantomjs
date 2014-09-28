@@ -151,4 +151,33 @@ describe('gulp-mocha-phantomjs', function () {
     stream.write(file);
     stream.end();
   });
+
+  it('should handle uri with querystring properly', function (cb) {
+    // mocha options with higher precedence
+    var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html?grep=should&q=1')});
+    var stream = mochaPhantomJS({mocha: {grep: 'viewport'}});
+    var passed = false;
+
+    stream.on('error', function () {
+      assert.fail(undefined, undefined, 'should not emit error');
+    });
+
+    stream.on('finish', function () {
+      assert.equal(passed, true);
+      process.stdout.write = out;
+      cb();
+    });
+
+    process.stdout.write = function (str) {
+      if (/1 passing/.test(str)) {
+        passed = true;
+      }
+      if (/should be false/.test(str) || /should be true/.test(str)) {
+        assert.fail();
+      }
+    };
+
+    stream.write(file);
+    stream.end();
+  });
 });
