@@ -6,6 +6,7 @@ var spawn = require('child_process').spawn;
 var through = require('through2');
 var gutil = require('gulp-util');
 var pluginName = require('./package.json').name;
+var extend = require('./extend');
 
 function mochaPhantomJS(options) {
   options = options || {};
@@ -18,10 +19,7 @@ function mochaPhantomJS(options) {
   return through.obj(function (file, enc, cb) {
     var args = [
       scriptPath,
-      url.format({
-        pathname: file.path.split(require('path').sep).join('/'),
-        query: options.mocha || {}
-      }),
+      mergeQuery(file.path, options.mocha),
       options.reporter || 'spec',
       JSON.stringify(options.phantomjs || {})
     ];
@@ -36,6 +34,19 @@ function mochaPhantomJS(options) {
       cb();
     }.bind(this));
   });
+}
+
+function mergeQuery(path, query) {
+  var parsed = url.parse(crossPlatform(path), true);
+
+  parsed.query = extend(parsed.query, query);
+  parsed.search = null;
+
+  return url.format(parsed);
+}
+
+function crossPlatform(str) {
+  return str.split(require('path').sep).join('/');
 }
 
 function spawnPhantomJS(args, options, cb) {
