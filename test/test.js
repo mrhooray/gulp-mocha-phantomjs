@@ -6,7 +6,7 @@ var gutil = require('gulp-util');
 var mochaPhantomJS = require('../index');
 var out = process.stdout.write.bind(process.stdout);
 var httpsServer = require('./https-server');
-var createPhantomCLIparams = require('../cli');
+var createPhantomCliParams = require('../cli');
 
 describe('gulp-mocha-phantomjs', function () {
   it('should pass when test passed', function (cb) {
@@ -122,6 +122,39 @@ describe('gulp-mocha-phantomjs', function () {
     stream.end();
   });
 
+  it('should pass through phantomjs options', function (cb) {
+    var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html')});
+    var stream = mochaPhantomJS({
+      phantomjs: {
+        viewportSize: {
+          width: 1,
+          height: 1
+        }
+      }
+    });
+    var passed = false;
+
+    stream.on('error', function () {
+      assert.fail(undefined, undefined, 'should not emit error');
+    });
+
+    stream.on('finish', function () {
+      assert.equal(passed, true);
+      process.stdout.write = out;
+      cb();
+    });
+
+    process.stdout.write = function (str) {
+      if (/3 passing/.test(str)) {
+        passed = true;
+      }
+    };
+
+    stream.write(file);
+    stream.end();
+  });
+
+
   it('cli params are formed correctly', function () {
     var phantomJSCliParams = {
       ignoreSslErrors: true,
@@ -129,7 +162,7 @@ describe('gulp-mocha-phantomjs', function () {
       outputEncoding: 'utf8',
       webSecurityEnabled: false
     };
-    var cliParams = createPhantomCLIparams(phantomJSCliParams);
+    var cliParams = createPhantomCliParams(phantomJSCliParams);
     var desired = [
       '--ignore-ssl-errors=true',
       '--max-disk-cache-size=1000',
@@ -140,7 +173,7 @@ describe('gulp-mocha-phantomjs', function () {
   });
 
   it('cli params are used by phantomjs', function (done) {
-    var server = httpsServer(4141, 'fixtures');
+    var server = httpsServer(4141);
     var phantom = mochaPhantomJS({
       phantomjs: {
         ignoreSslErrors: true
@@ -164,12 +197,12 @@ describe('gulp-mocha-phantomjs', function () {
     });
 
     process.stdout.write = function (str) {
-      if (/1 passing/.test(str)) {
+      if (/3 passing/.test(str)) {
         passed = true;
       }
     };
 
-    phantom.write({path: 'https://localhost:4141/'});
+    phantom.write({path: 'https://localhost:4141/test/fixture-pass.html'});
     phantom.end();
   });
 

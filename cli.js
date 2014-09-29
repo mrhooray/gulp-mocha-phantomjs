@@ -46,10 +46,15 @@ var JSON_TO_CLI = {
   'webdriverSeleniumGridHub'     : '--webdriver-selenium-grid-hub'
 };
 
-function createPhantomCLIparams(phantomjs) {
-  return Object.keys(phantomjs).map(function(setting) {
-    return JSON_TO_CLI[setting] + '=' + phantomjs[setting];
-  });
+function createPhantomCliParams(phantomjs) {
+  return Object
+           .keys(phantomjs)
+           .filter(function(setting) {
+             return JSON_TO_CLI[setting] !== undefined;
+           })
+           .map(function(setting) {
+             return JSON_TO_CLI[setting] + '=' + phantomjs[setting];
+           });
 }
 
-module.exports = createPhantomCLIparams;
+module.exports = createPhantomCliParams;

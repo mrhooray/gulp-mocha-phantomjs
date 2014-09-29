@@ -1,31 +1,43 @@
 'use strict';
 
-var https = require('https');
-var fs = require('fs');
-var path = require('path');
+var https = require('https'),
+    fs = require('fs'),
+    path = require('path'),
+    url = require('url');
+
 
 var options = {
   key: fs.readFileSync(path.join(__dirname, 'certs', 'server.key')),
   cert: fs.readFileSync(path.join(__dirname, 'certs', 'server.crt'))
 };
 
-function resolveFile(path) {
-  return !path ? 'index.html' : path;
-}
-
-function serve(port, root) {
-  var server = https.createServer(options, function (req, res) {
-    var wantedFile = resolveFile(req.url.split('/')[1]),
-        fulleFilepath = path.join(__dirname, root, wantedFile),
-        data = fs.readFileSync(fulleFilepath);
-    res.writeHead(200);
-    res.end(data);
-  })
-    .on('error', function(error) {
-      server.close();
-      throw error;
-    })
-    .listen(port);
+function serve(port) {
+    var splitFilteredDirname =
+          __dirname
+            .split(path.sep)
+            .filter(function (part) {
+                return part !== 'test';
+            }),
+        serverRoot =
+          splitFilteredDirname.join(path.sep),
+        server =
+          https.createServer(options, function (req, res) {
+            var wantedFile =
+                  url.parse(req.url).pathname
+                    .split('/')
+                    .join(path.sep),
+                fullFilepath =
+                  path.join(serverRoot, wantedFile),
+                data =
+                  fs.readFileSync(fullFilepath);
+            res.writeHead(200);
+            res.end(data);
+        })
+          .on('error', function(error) {
+              server.close();
+            throw error;
+          })
+          .listen(port);
   return server;
 }
 
