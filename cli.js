@@ -37,7 +37,7 @@ var JSON_TO_CLI = {
   // --ssl-protocol=[sslv3|sslv2|tlsv1|any'] sets the SSL protocol for secure connections (default is SSLv3).
   'sslProtocol'                  : '--ssl-protocol',
   // --ssl-certificates-path=<val> Sets the location for custom CA certificates (if none set, uses system default).
-  '--sslCertificatesPath'        : '--ssl-certificates-path',
+  'sslCertificatesPath'        : '--ssl-certificates-path',
   // --web-security=[true|false] enables web security and forbids cross-domain XHR (default is true). Also accepted: [yes|no].
   'webSecurityEnabled'           : '--web-security',
  // --webdriver starts in 'Remote WebDriver mode' (embedded GhostDriver): '[[:]]' (default '127.0.0.1:8910')
@@ -57,4 +57,20 @@ function createPhantomCliParams(phantomjs) {
            });
 }
 
-module.exports = createPhantomCliParams;
+function removeCliParams(phantomjs) {
+  phantomjs = phantomjs || {};
+  return Object
+      .keys(phantomjs)
+      .filter(function(setting) {
+          return JSON_TO_CLI[setting] === undefined;
+      })
+      .reduce(function(newOptionsObject, setting) {
+          newOptionsObject[setting] = phantomjs[setting];
+          return newOptionsObject;
+      }, {});
+}
+
+module.exports = {
+  createPhantomCliParams: createPhantomCliParams,
+  removeCliParams: removeCliParams
+};

@@ -6,7 +6,7 @@ var spawn = require('child_process').spawn;
 var through = require('through2');
 var gutil = require('gulp-util');
 var pluginName = require('./package.json').name;
-var createPhantomCliParams = require('./cli');
+var cli = require('./cli');
 
 
 function mochaPhantomJS(options) {
@@ -25,11 +25,11 @@ function mochaPhantomJS(options) {
         query: options.mocha || {}
       }),
       options.reporter || 'spec',
-      JSON.stringify(options.phantomjs || {})
+      JSON.stringify(cli.removeCliParams(options.phantomjs))
     ];
 
     if(options.phantomjs) {
-      var cliParams = createPhantomCliParams(options.phantomjs);
+      var cliParams = cli.createPhantomCliParams(options.phantomjs);
       cliParams.forEach(function(param) {
         args.unshift(param);
       });

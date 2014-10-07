@@ -6,7 +6,7 @@ var gutil = require('gulp-util');
 var mochaPhantomJS = require('../index');
 var out = process.stdout.write.bind(process.stdout);
 var httpsServer = require('./https-server');
-var createPhantomCliParams = require('../cli');
+var cli = require('../cli');
 
 describe('gulp-mocha-phantomjs', function () {
   it('should pass when test passed', function (cb) {
@@ -162,7 +162,7 @@ describe('gulp-mocha-phantomjs', function () {
       outputEncoding: 'utf8',
       webSecurityEnabled: false
     };
-    var cliParams = createPhantomCliParams(phantomJSCliParams);
+    var cliParams = cli.createPhantomCliParams(phantomJSCliParams);
     var desired = [
       '--ignore-ssl-errors=true',
       '--max-disk-cache-size=1000',
