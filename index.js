@@ -18,6 +18,7 @@ function mochaPhantomJS(options) {
 
   return through.obj(function (file, enc, cb) {
     var args = [
+      '--web-security=false',
       scriptPath,
       mergeQuery(file.path, options.mocha),
       options.reporter || 'spec',
