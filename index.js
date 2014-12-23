@@ -10,6 +10,7 @@ var extend = require('./extend');
 
 function mochaPhantomJS(options) {
   options = options || {};
+
   var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
 
   if (!scriptPath) {
@@ -24,7 +25,7 @@ function mochaPhantomJS(options) {
       JSON.stringify(options.phantomjs || {})
     ];
 
-    spawnPhantomJS(args, options, function (err) {
+    spawnPhantomJS(args, options, this, function (err) {
       if (err) {
         this.emit('error', err);
       }
@@ -49,7 +50,7 @@ function crossPlatform(str) {
   return str.split(require('path').sep).join('/');
 }
 
-function spawnPhantomJS(args, options, cb) {
+function spawnPhantomJS(args, options, stream, cb) {
   // in case npm is started with --no-bin-links
   var phantomjsPath = lookup('.bin/phantomjs', true) || lookup('phantomjs/bin/phantomjs', true);
 
@@ -65,6 +66,15 @@ function spawnPhantomJS(args, options, cb) {
 
   phantomjs.stdout.pipe(process.stdout);
   phantomjs.stderr.pipe(process.stderr);
+
+  phantomjs.stdout.on('data', stream.emit.bind(stream, 'phantomjsStdoutData'));
+  phantomjs.stdout.on('end', stream.emit.bind(stream, 'phantomjsStdoutEnd'));
+
+  phantomjs.stderr.on('data', stream.emit.bind(stream, 'phantomjsStderrData'));
+  phantomjs.stderr.on('end', stream.emit.bind(stream, 'phantomjsStderrEnd'));
+
+  phantomjs.on('error', stream.emit.bind(stream, 'phantomjsError'));
+  phantomjs.on('exit', stream.emit.bind(stream, 'phantomjsExit'));
 
   phantomjs.on('error', function (err) {
     cb(new gutil.PluginError(pluginName, err.message));
