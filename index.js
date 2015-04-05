@@ -61,7 +61,7 @@ function spawnPhantomJS(args, options, stream, cb) {
   var phantomjs = spawn(phantomjsPath, args);
 
   if (options.dump) {
-    phantomjs.stdout.pipe(fs.createWriteStream(options.dump));
+    phantomjs.stdout.pipe(fs.createWriteStream(options.dump, {flags: 'a'}));
   }
 
   phantomjs.stdout.pipe(process.stdout);
