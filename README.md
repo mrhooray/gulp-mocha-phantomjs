@@ -67,7 +67,7 @@ Output of mocha tests can be piped into a file via `dump` option:
 gulp.task('test', function () {
   return gulp
   .src('test/runner.html')
-  .pipe(mochaPhantomJS({reporter: 'xunit', dump:'test.xml'}));
+  .pipe(mochaPhantomJS({reporter: 'spec', dump:'test.log'}));
 });
 ```
 
