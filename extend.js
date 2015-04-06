@@ -1,19 +1,19 @@
 'use strict';
 
 function extend() {
-  var target = {};
+    var target = {};
 
-  for (var i = 0; i < arguments.length; i++) {
-    var source = arguments[i];
+    for (var i = 0; i < arguments.length; i++) {
+        var source = arguments[i];
 
-    for (var key in source) {
-      if (source.hasOwnProperty(key)) {
-        target[key] = source[key];
-      }
+        for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+                target[key] = source[key];
+            }
+        }
     }
-  }
 
-  return target;
+    return target;
 }
 
 module.exports = extend;

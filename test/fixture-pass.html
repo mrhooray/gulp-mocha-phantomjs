@@ -1,47 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Mocha</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
-  </head>
-  <body>
-    <div id="mocha"></div>
-    <script src="../node_modules/should/should.js"></script>
-    <script src="../node_modules/mocha/mocha.js"></script>
-    <script>mocha.setup('bdd')</script>
-    <script>
-      describe('true', function () {
-        it('should be true', function () {
-          true.should.equal(true);
-        });
-      });
-      describe('false', function () {
-        it('should be false', function () {
-          false.should.equal(false);
-        });
-      });
-      describe('viewport size', function () {
-        if (window._phantom) {
-          it('should be phantomjs default or testing value', function () {
-            (window.innerWidth === 400 || window.innerWidth === 1).should.equal(true);
-            (window.innerHeight === 300 || window.innerHeight === 1).should.equal(true);
-          });
-        } else {
-          it('should be valid', function () {
-            (window.innerWidth >= 0).should.equal(true);
-            (window.innerHeight >= 0).should.equal(true);
-          });
-        }
-      });
-    </script>
-    <script>
-      if (window.mochaPhantomJS) {
-        mochaPhantomJS.run();
-      } else {
-        mocha.run();
-      }
-    </script>
-  </body>
+    <head>
+        <title>Mocha</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    </head>
+    <body>
+        <script src="../node_modules/should/should.js"></script>
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script>mocha.setup('bdd')</script>
+        <script>
+            describe('true', function () {
+                it('should be true', function () {
+                    true.should.equal(true);
+                });
+            });
+            describe('false', function () {
+                it('should be false', function () {
+                    false.should.equal(false);
+                });
+            });
+            describe('viewport size', function () {
+                if (window._phantom) {
+                    it('should be phantomjs default or testing value', function () {
+                        (window.innerWidth === 400 || window.innerWidth === 1).should.equal(true);
+                        (window.innerHeight === 300 || window.innerHeight === 1).should.equal(true);
+                    });
+                } else {
+                    it('should be valid', function () {
+                        (window.innerWidth >= 0).should.equal(true);
+                        (window.innerHeight >= 0).should.equal(true);
+                    });
+                }
+            });
+        </script>
+        <script>
+            if (window.mochaPhantomJS) {
+                mochaPhantomJS.run();
+            } else {
+                mocha.run();
+            }
+        </script>
+    </body>
 </html>
