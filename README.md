@@ -11,32 +11,31 @@ $ npm install gulp-mocha-phantomjs --save-dev
 ```html
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Mocha</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./node_modules/mocha/mocha.css" />
-  </head>
-  <body>
-    <div id="mocha"></div>
-    <script src="./node_modules/should/should.js"></script>
-    <script src="./node_modules/mocha/mocha.js"></script>
-    <script>mocha.setup('bdd')</script>
-    <script>
-      describe('true', function () {
-        it('should be true', function () {
-          true.should.equal(true);
-        });
-      });
-    </script>
-    <script>
-      if (window.mochaPhantomJS) {
-        mochaPhantomJS.run();
-      } else {
-        mocha.run();
-      }
-    </script>
-  </body>
+    <head>
+        <title>Mocha</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    </head>
+    <body>
+        <script src="../node_modules/should/should.js"></script>
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script>mocha.setup('bdd')</script>
+        <script>
+            describe('true', function () {
+                it('should be true', function () {
+                    true.should.equal(true);
+                });
+            });
+        </script>
+        <script>
+            if (window.mochaPhantomJS) {
+                mochaPhantomJS.run();
+            } else {
+                mocha.run();
+            }
+        </script>
+    </body>
 </html>
 ```
 
@@ -45,9 +44,9 @@ var gulp = require('gulp');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
 
 gulp.task('test', function () {
-  return gulp
-  .src('test/runner.html')
-  .pipe(mochaPhantomJS());
+    return gulp
+    .src('test/runner.html')
+    .pipe(mochaPhantomJS());
 });
 ```
 
@@ -55,9 +54,9 @@ Reporter can be chosen via `reporter` option:
 
 ```javascript
 gulp.task('test', function () {
-  return gulp
-  .src('test/runner.html')
-  .pipe(mochaPhantomJS({reporter: 'spec'}));
+    return gulp
+    .src('test/runner.html')
+    .pipe(mochaPhantomJS({reporter: 'spec'}));
 });
 ```
 
@@ -65,9 +64,9 @@ Output of mocha tests can be piped into a file via `dump` option:
 
 ```javascript
 gulp.task('test', function () {
-  return gulp
-  .src('test/runner.html')
-  .pipe(mochaPhantomJS({reporter: 'spec', dump:'test.log'}));
+    return gulp
+    .src('test/runner.html')
+    .pipe(mochaPhantomJS({reporter: 'spec', dump:'test.log'}));
 });
 ```
 
@@ -75,10 +74,10 @@ Test against remote by url:
 
 ```javascript
 gulp.task('test', function () {
-  var stream = mochaPhantomJS();
-  stream.write({path: 'http://localhost:8000/index.html'});
-  stream.end();
-  return stream;
+    var stream = mochaPhantomJS();
+    stream.write({path: 'http://localhost:8000/index.html'});
+    stream.end();
+    return stream;
 });
 ```
 
@@ -86,20 +85,20 @@ Pass options to mocha and/or PhantomJS:
 
 ```javascript
 gulp.task('test', function () {
-  return gulp
-  .src('test/runner.html')
-  .pipe(mochaPhantomJS({
-    reporter: 'tap',
-    mocha: {
-      grep: 'pattern'
-    },
-    phantomjs: {
-      viewportSize: {
-        width: 1024,
-        height: 768
-      }
-    }
-  }));
+    return gulp
+    .src('test/runner.html')
+    .pipe(mochaPhantomJS({
+        reporter: 'tap',
+        mocha: {
+            grep: 'pattern'
+        },
+        phantomjs: {
+            viewportSize: {
+                width: 1024,
+                height: 768
+            }
+        }
+    }));
 });
 ```
 
