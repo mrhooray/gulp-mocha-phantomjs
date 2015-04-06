@@ -27,7 +27,7 @@ function mochaPhantomJS(options) {
 
     spawnPhantomJS(args, options, this, function (err) {
       if (err) {
-        this.emit('error', err);
+          return cb(err);
       }
 
       this.push(file);
