@@ -11,10 +11,10 @@ var extend = require('./extend');
 function mochaPhantomJS(options) {
     options = options || {};
 
-    var scriptPath = lookup('mocha-phantomjs/lib/mocha-phantomjs.coffee');
+    var scriptPath = lookup('mocha-phantomjs-core/mocha-phantomjs-core.js');
 
     if (!scriptPath) {
-        throw new gutil.PluginError(pluginName, 'mocha-phantomjs.coffee not found');
+        throw new gutil.PluginError(pluginName, 'mocha-phantomjs-core.js not found');
     }
 
     return through.obj(function (file, enc, cb) {
