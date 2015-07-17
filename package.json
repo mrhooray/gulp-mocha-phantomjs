@@ -23,7 +23,7 @@
   "dependencies": {
     "gulp-util": "^2.2.14",
     "mocha-phantomjs-core": "^1.0.0",
-    "phantomjs": "1.9.1 - 1.9.7-15",
+    "phantomjs": "^1.9.1",
     "through2": "^0.4.1"
   },
   "devDependencies": {
