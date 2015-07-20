@@ -31,11 +31,7 @@ $ npm install gulp-mocha-phantomjs --save-dev
             });
         </script>
         <script>
-            if (window.mochaPhantomJS) {
-                mochaPhantomJS.run();
-            } else {
-                mocha.run();
-            }
+            mocha.run();
         </script>
     </body>
 </html>
