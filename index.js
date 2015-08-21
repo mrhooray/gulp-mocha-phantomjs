@@ -64,8 +64,13 @@ function spawnPhantomJS(args, options, stream, cb) {
         phantomjs.stdout.pipe(fs.createWriteStream(options.dump, {flags: 'a'}));
     }
 
-    phantomjs.stdout.pipe(process.stdout);
-    phantomjs.stderr.pipe(process.stderr);
+    if (!options.suppressStdout) {
+        phantomjs.stdout.pipe(process.stdout);
+    }
+
+    if (!options.suppressStderr) {
+        phantomjs.stderr.pipe(process.stderr);
+    }
 
     phantomjs.stdout.on('data', stream.emit.bind(stream, 'phantomjsStdoutData'));
     phantomjs.stdout.on('end', stream.emit.bind(stream, 'phantomjsStdoutEnd'));
