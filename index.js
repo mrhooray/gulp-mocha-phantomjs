@@ -20,7 +20,7 @@ function mochaPhantomJS(options) {
     return through.obj(function (file, enc, cb) {
         var args = [
             scriptPath,
-            mergeQuery(file.path, options.mocha),
+            mergeQuery(toURI(file.path), options.mocha),
             options.reporter || 'spec',
             JSON.stringify(options.phantomjs || {})
         ];
@@ -103,6 +103,16 @@ function lookup(path, isExecutable) {
         if (fs.existsSync(absPath)) {
             return absPath;
         }
+    }
+}
+
+function toURI(path) {
+    if (/^.*:\/\//.test(path)) {
+        return path;
+    } else if (process.platform === 'win32' && /^.:\//.test(path)) {
+        return 'file:///' + path;
+    } else {
+        return 'file://' + path;
     }
 }
 
