@@ -24,7 +24,7 @@ gulp.task('test', ['jshint'], function () {
     .pipe(mocha({reporter: 'spec'}));
 });
 
-gulp.task('run', function () {
+gulp.task('run:pass', function () {
     return gulp
     .src('test/fixture-pass.html')
     .pipe(mochaPhantomJS({reporter: 'spec'}));
@@ -34,6 +34,13 @@ gulp.task('run:dump', function () {
     return gulp
     .src('test/fixture-pass.html')
     .pipe(mochaPhantomJS({reporter: 'xunit', dump:'dump.xml'}));
+});
+
+gulp.task('run:http', function () {
+    var stream = mochaPhantomJS();
+    stream.write({path: 'http://localhost:8000/test/fixture-pass.html'});
+    stream.end();
+    return stream;
 });
 
 gulp.task('default', ['test']);
