@@ -20,7 +20,7 @@ function mochaPhantomJS(options) {
     return through.obj(function (file, enc, cb) {
         var args = [
             scriptPath,
-            mergeQuery(toURI(file.path), options.mocha),
+            toURI(file.path, options.mocha),
             options.reporter || 'spec',
             JSON.stringify(options.phantomjs || {})
         ];
@@ -37,11 +37,16 @@ function mochaPhantomJS(options) {
     });
 }
 
-function mergeQuery(path, query) {
+function toURI(path, query) {
     var parsed = url.parse(crossPlatform(path), true);
 
     parsed.query = extend(parsed.query, query);
     parsed.search = null;
+
+    if (!parsed.protocol) {
+        parsed.protocol = 'file:';
+        parsed.slashes = true;
+    }
 
     return url.format(parsed);
 }
@@ -103,16 +108,6 @@ function lookup(path, isExecutable) {
         if (fs.existsSync(absPath)) {
             return absPath;
         }
-    }
-}
-
-function toURI(path) {
-    if (/^.*:\/\//.test(path)) {
-        return path;
-    } else if (process.platform === 'win32' && /^.:\//.test(path)) {
-        return 'file:///' + path;
-    } else {
-        return 'file://' + path;
     }
 }
 
