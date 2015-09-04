@@ -38,7 +38,7 @@ function mochaPhantomJS(options) {
 }
 
 function toURI(path, query) {
-    var parsed = url.parse(crossPlatform(path), true);
+    var parsed = url.parse(path, true);
 
     parsed.query = extend(parsed.query, query);
     parsed.search = null;
@@ -49,10 +49,6 @@ function toURI(path, query) {
     }
 
     return url.format(parsed);
-}
-
-function crossPlatform(str) {
-    return str.split(require('path').sep).join('/');
 }
 
 function spawnPhantomJS(args, options, stream, cb) {
