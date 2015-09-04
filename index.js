@@ -94,7 +94,7 @@ function spawnPhantomJS(args, options, stream, cb) {
         if (code === 0 || options.silent) {
             cb();
         } else {
-            cb(new gutil.PluginError(pluginName, 'test failed'));
+            cb(new gutil.PluginError(pluginName, 'test failed. phantomjs exit code: ' + code));
         }
     });
 }
