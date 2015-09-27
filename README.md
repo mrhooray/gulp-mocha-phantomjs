@@ -1,7 +1,7 @@
 # [gulp](https://github.com/wearefractal/gulp)-mocha-phantomjs [![Build Status](https://travis-ci.org/mrhooray/gulp-mocha-phantomjs.svg?branch=master)](https://travis-ci.org/mrhooray/gulp-mocha-phantomjs)
 > run client-side [Mocha](https://github.com/visionmedia/mocha) tests with [PhantomJS](https://github.com/ariya/phantomjs)
 
-> a simple wrapper for [mocha-phantomjs-core](https://github.com/metaskills/mocha-phantomjs-core)'s core library
+> a simple wrapper for [mocha-phantomjs-core](https://github.com/nathanboktae/mocha-phantomjs-core) library
 
 ## Installation
 ### node
