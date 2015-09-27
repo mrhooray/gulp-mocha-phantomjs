@@ -1,4 +1,4 @@
-# [gulp](https://github.com/wearefractal/gulp)-mocha-phantomjs [![Build Status](https://travis-ci.org/mrhooray/gulp-mocha-phantomjs.svg?branch=master)](https://travis-ci.org/mrhooray/gulp-mocha-phantomjs)
+# [gulp](https://github.com/wearefractal/gulp)-mocha-phantomjs [![Build Status](https://travis-ci.org/mrhooray/gulp-mocha-phantomjs.svg?branch=master)](https://travis-ci.org/mrhooray/gulp-mocha-phantomjs) [![Build status](https://ci.appveyor.com/api/projects/status/4ngkp3ijx27alr5u?svg=true)](https://ci.appveyor.com/project/mrhooray/gulp-mocha-phantomjs)
 > run client-side [Mocha](https://github.com/visionmedia/mocha) tests with [PhantomJS](https://github.com/ariya/phantomjs)
 
 > a simple wrapper for [mocha-phantomjs-core](https://github.com/nathanboktae/mocha-phantomjs-core) library
