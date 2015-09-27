@@ -154,7 +154,7 @@ describe('gulp-mocha-phantomjs', function () {
 
     it('should handle uri with querystring properly', function (cb) {
         // mocha options with higher precedence
-        var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html?grep=should&q=1')});
+        var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html?grep=should')});
         var stream = mochaPhantomJS({mocha: {grep: 'viewport'}});
         var passed = false;
 
