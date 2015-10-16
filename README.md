@@ -79,6 +79,19 @@ gulp.task('test', function () {
 });
 ```
 
+Suppress PhantomJS’s console output:
+
+```javascript
+gulp.task('test', function() {
+    return gulp
+    .src('test/runner.html')
+    .pipe(mochaPhantomJS({
+        suppressStdout: true,
+        suppressStderr: true
+    }));
+});
+```
+
 Pass options to mocha and/or PhantomJS:
 
 ```javascript
