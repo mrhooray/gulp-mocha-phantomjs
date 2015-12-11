@@ -21,6 +21,7 @@
     "test": "gulp test"
   },
   "dependencies": {
+    "file-url": "^1.0.1",
     "gulp-util": "^2.2.14",
     "mocha-phantomjs-core": "^1.0.0",
     "phantomjs": "1.9.1 - 1.9.7-15",
