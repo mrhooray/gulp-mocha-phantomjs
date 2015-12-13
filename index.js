@@ -7,7 +7,6 @@ var through = require('through2');
 var gutil = require('gulp-util');
 var pluginName = require('./package.json').name;
 var extend = require('./extend');
-var fileUrl = require('file-url');
 
 function mochaPhantomJS(options) {
     options = options || {};
@@ -39,7 +38,7 @@ function mochaPhantomJS(options) {
 }
 
 function toURI(path, query) {
-    var parsed = url.parse(fileUrl(path), true);
+    var parsed = url.parse(path, true);
 
     parsed.query = extend(parsed.query, query);
     parsed.search = null;
