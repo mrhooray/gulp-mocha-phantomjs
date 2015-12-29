@@ -107,7 +107,8 @@ gulp.task('test', function () {
             viewportSize: {
                 width: 1024,
                 height: 768
-            }
+            },
+            useColors:true
         }
     }));
 });
