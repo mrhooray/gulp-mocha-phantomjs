@@ -7,6 +7,8 @@ var mochaPhantomJS = require('../index');
 var out = process.stdout.write.bind(process.stdout);
 
 describe('gulp-mocha-phantomjs', function () {
+    this.timeout(0);
+
     it('should pass when test passed', function (cb) {
         var file = new gutil.File({path: path.join(__dirname, 'fixture-pass.html')});
         var stream = mochaPhantomJS();

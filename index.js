@@ -1,10 +1,12 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var url = require('url');
 var spawn = require('child_process').spawn;
 var through = require('through2');
 var gutil = require('gulp-util');
+
 var pluginName = require('./package.json').name;
 var extend = require('./extend');
 
@@ -20,7 +22,7 @@ function mochaPhantomJS(options) {
     return through.obj(function (file, enc, cb) {
         var args = [
             scriptPath,
-            toURI(file.path, options.mocha),
+            toURL(file.path, options.mocha),
             options.reporter || 'spec',
             JSON.stringify(options.phantomjs || {})
         ];
@@ -37,18 +39,28 @@ function mochaPhantomJS(options) {
     });
 }
 
-function toURI(path, query) {
+function toURL(path, query) {
     var parsed = url.parse(path, true);
 
     parsed.query = extend(parsed.query, query);
     parsed.search = null;
 
-    if (!parsed.protocol) {
-        parsed.protocol = 'file:';
-        parsed.slashes = true;
+    if (parsed.protocol === 'http:' ) {
+        return url.format(parsed);
+    } else {
+        return fileURL(url.format(parsed));
+    }
+}
+
+function fileURL(str) {
+    var pathName = path.resolve(str).replace(/\\/g, '/');
+
+    // for windows
+    if (pathName[0] !== '/') {
+        pathName = '/' + pathName;
     }
 
-    return url.format(parsed);
+    return encodeURI('file://' + pathName);
 }
 
 function spawnPhantomJS(args, options, stream, cb) {
