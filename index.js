@@ -65,7 +65,7 @@ function fileURL(str) {
 
 function spawnPhantomJS(args, options, stream, cb) {
     // in case npm is started with --no-bin-links
-    var phantomjsPath = lookup('.bin/phantomjs', true) || lookup('phantomjs/bin/phantomjs', true);
+    var phantomjsPath = lookup('.bin/phantomjs', true) || lookup('phantomjs-prebuilt/bin/phantomjs', true);
 
     if (!phantomjsPath) {
         return cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
