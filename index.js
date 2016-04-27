@@ -45,7 +45,7 @@ function toURL(path, query) {
     parsed.query = extend(parsed.query, query);
     parsed.search = null;
 
-    if (parsed.protocol === 'http:' ) {
+    if (parsed.protocol !== null) {
         return url.format(parsed);
     } else {
         return fileURL(url.format(parsed));
