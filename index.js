@@ -20,9 +20,9 @@ function mochaPhantomJS(options) {
     }
 
     return through.obj(function (file, enc, cb) {
-        var args = []
+        var args = [];
         if (options.debug) {
-            args.push('--debug=true')
+            args.push('--debug=true');
         }
         args = args.concat([
             scriptPath,
