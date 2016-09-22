@@ -122,7 +122,7 @@ function lookup(path, isExecutable) {
 }
 
 function escapeSpaces(str) {
-    return str.replace(/ /g, "\\ ");
+    return str.replace(/ /g, '\\ ');
 }
 
 module.exports = mochaPhantomJS;
