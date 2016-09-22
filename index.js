@@ -22,7 +22,7 @@ function mochaPhantomJS(options) {
     return through.obj(function (file, enc, cb) {
         var args = [
             scriptPath,
-            toURL(file.path, options.mocha),
+            escapeSpaces(toURL(file.path, options.mocha)),
             options.reporter || 'spec',
             JSON.stringify(options.phantomjs || {})
         ];
@@ -71,6 +71,8 @@ function spawnPhantomJS(args, options, stream, cb) {
         return cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
     }
 
+    phantomjsPath = escapeSpaces(phantomjsPath);
+
     var phantomjs = spawn(phantomjsPath, args);
 
     if (options.dump) {
@@ -117,6 +119,10 @@ function lookup(path, isExecutable) {
             return absPath;
         }
     }
+}
+
+function escapeSpaces(str) {
+    return str.replace(/ /g, "\\ ");
 }
 
 module.exports = mochaPhantomJS;
