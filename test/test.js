@@ -133,6 +133,7 @@ describe('gulp-mocha-phantomjs', function () {
             }
         });
         var passed = false;
+        var oldWrite = process.stdout.write;
 
         stream.on('error', function () {
             assert.fail(undefined, undefined, 'should not emit error');
@@ -148,6 +149,8 @@ describe('gulp-mocha-phantomjs', function () {
             if (/3 passing/.test(str)) {
                 passed = true;
             }
+
+            oldWrite.apply(process.stdout, arguments);
         };
 
         stream.write(file);
@@ -176,6 +179,31 @@ describe('gulp-mocha-phantomjs', function () {
             }
             if (/should be false/.test(str) || /should be true/.test(str)) {
                 assert.fail();
+            }
+        };
+
+        stream.write(file);
+        stream.end();
+    });
+
+    it('should handle uri with space propertly', function (cb) {
+        var file = new gutil.File({path: path.join(__dirname, 'spaces pass.html')});
+        var stream = mochaPhantomJS();
+        var passed = false;
+
+        stream.on('error', function () {
+            assert.fail(undefined, undefined, 'should not emit error');
+        });
+
+        stream.on('finish', function () {
+            assert.equal(passed, true);
+            process.stdout.write = out;
+            cb();
+        });
+
+        process.stdout.write = function (str) {
+            if (/1 passing/.test(str)) {
+                passed = true;
             }
         };
 

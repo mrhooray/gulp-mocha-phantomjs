@@ -21,8 +21,8 @@ function mochaPhantomJS(options) {
 
     return through.obj(function (file, enc, cb) {
         var args = [
-            scriptPath,
-            escapeSpaces(toURL(file.path, options.mocha)),
+            escapeSpaces(scriptPath),
+            deencodeSpaces(toURL(file.path, options.mocha)),
             options.reporter || 'spec',
             JSON.stringify(options.phantomjs || {})
         ];
@@ -66,14 +66,19 @@ function fileURL(str) {
 function spawnPhantomJS(args, options, stream, cb) {
     // in case npm is started with --no-bin-links
     var phantomjsPath = lookup('.bin/phantomjs', true) || lookup('phantomjs-prebuilt/bin/phantomjs', true);
+    var spawnOptions = {};
 
     if (!phantomjsPath) {
         return cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
     }
 
+    if (phantomjsPath.indexOf(' ') !== -1) {
+        spawnOptions.shell = true;
+    }
+
     phantomjsPath = escapeSpaces(phantomjsPath);
 
-    var phantomjs = spawn(phantomjsPath, args);
+    var phantomjs = spawn(phantomjsPath, args, spawnOptions);
 
     if (options.dump) {
         phantomjs.stdout.pipe(fs.createWriteStream(options.dump, {flags: 'a'}));
@@ -122,7 +127,11 @@ function lookup(path, isExecutable) {
 }
 
 function escapeSpaces(str) {
-    return str.replace(/ /g, '\\ ');
+    return str.indexOf(' ') === -1 ? str : '"' + str + '"';
+}
+
+function deencodeSpaces(str) {
+    return str.indexOf('%2520') === -1 ? str : '"' + str.replace(/%2520/g, ' ') + '"'; 
 }
 
 module.exports = mochaPhantomJS;
