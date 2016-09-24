@@ -72,7 +72,7 @@ function spawnPhantomJS(args, options, stream, cb) {
         return cb(new gutil.PluginError(pluginName, 'PhantomJS not found'));
     }
 
-    if (phantomjsPath.indexOf(' ') !== -1) {
+    if (phantomjsPath.indexOf(' ') !== -1 || args[0].indexOf(' ') !== -1 || args[1].indexOf(' ') !== -1) {
         spawnOptions.shell = true;
     }
 

@@ -133,7 +133,6 @@ describe('gulp-mocha-phantomjs', function () {
             }
         });
         var passed = false;
-        var oldWrite = process.stdout.write;
 
         stream.on('error', function () {
             assert.fail(undefined, undefined, 'should not emit error');
@@ -149,8 +148,6 @@ describe('gulp-mocha-phantomjs', function () {
             if (/3 passing/.test(str)) {
                 passed = true;
             }
-
-            oldWrite.apply(process.stdout, arguments);
         };
 
         stream.write(file);
