@@ -20,12 +20,16 @@ function mochaPhantomJS(options) {
     }
 
     return through.obj(function (file, enc, cb) {
-        var args = [
+        var args = [];
+        if (options.debug) {
+            args.push('--debug=true');
+        }
+        args = args.concat([
             scriptPath,
             toURL(file.path, options.mocha),
             options.reporter || 'spec',
             JSON.stringify(options.phantomjs || {})
-        ];
+        ]);
 
         spawnPhantomJS(args, options, this, function (err) {
             if (err) {
