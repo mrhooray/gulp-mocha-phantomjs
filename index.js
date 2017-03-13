@@ -24,7 +24,8 @@ function mochaPhantomJS(options) {
             scriptPath,
             toURL(file.path, options.mocha),
             options.reporter || 'spec',
-            JSON.stringify(options.phantomjs || {})
+            JSON.stringify(options.phantomjs || {}),
+            JSON.stringify(options.reporterOptions || {})
         ];
 
         spawnPhantomJS(args, options, this, function (err) {
