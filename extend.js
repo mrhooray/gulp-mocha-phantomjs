@@ -7,7 +7,7 @@ function extend() {
         var source = arguments[i];
 
         for (var key in source) {
-            if (source.hasOwnProperty(key)) {
+            if (source[key] !== undefined) {
                 target[key] = source[key];
             }
         }

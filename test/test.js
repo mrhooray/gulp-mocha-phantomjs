@@ -182,4 +182,29 @@ describe('gulp-mocha-phantomjs', function () {
         stream.write(file);
         stream.end();
     });
+
+    it('should handle uri with space propertly', function (cb) {
+        var file = new gutil.File({path: path.join(__dirname, 'spaces pass.html')});
+        var stream = mochaPhantomJS();
+        var passed = false;
+
+        stream.on('error', function () {
+            assert.fail(undefined, undefined, 'should not emit error');
+        });
+
+        stream.on('finish', function () {
+            assert.equal(passed, true);
+            process.stdout.write = out;
+            cb();
+        });
+
+        process.stdout.write = function (str) {
+            if (/1 passing/.test(str)) {
+                passed = true;
+            }
+        };
+
+        stream.write(file);
+        stream.end();
+    });
 });
