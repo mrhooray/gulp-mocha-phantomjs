@@ -3,6 +3,9 @@
 
 > a simple wrapper for [mocha-phantomjs-core](https://github.com/nathanboktae/mocha-phantomjs-core) library
 
+## Warning
+This project is no longer maintained.
+
 ## Installation
 ### node
 ```shell
